@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="dataSource" class="com.lau.lab1.DatabaseConnection.DataSource"/>
+    <bean id="users" class="com.lau.lab1.repository.UserRepository">
+        <constructor-arg ref="dataSource" />
+    </bean>
+    <bean id="probe" class="com.lau.lab1.repository.ProbaRepository">
+        <constructor-arg ref="dataSource" />
+    </bean>
+    <bean id="participants" class="com.lau.lab1.repository.ParticipantRepository">
+        <constructor-arg ref="dataSource" />
+    </bean>
+    <bean id="factory" class="com.lau.lab1.repository.ParticipantProbaRepositoryFactory">
+        <constructor-arg ref="dataSource" />
+    </bean>
+    <bean id="model" class="com.lau.lab1.Service.Model">
+        <constructor-arg ref="users" />
+        <constructor-arg ref="participants" />
+        <constructor-arg ref="factory" />
+        <constructor-arg ref="probe" />
+    </bean>
+
+    <bean id="userService" class="com.lau.lab1.Service.UserService"/>
+    <bean id="obsUserService" class="com.lau.lab1.Service.ObservableBaseService">
+        <constructor-arg ref="userService"/>
+    </bean>
+    <bean id="participantService" class="com.lau.lab1.Service.ParticipantService"/>
+    <bean id="obsParticipantService" class="com.lau.lab1.Service.ObservableBaseService">
+        <constructor-arg ref="participantService"/>
+    </bean>
+    <bean id="probaService" class="com.lau.lab1.Service.ProbeService"/>
+    <bean id="obsProbaService" class="com.lau.lab1.Service.ObservableBaseService">
+        <constructor-arg ref="probaService"/>
+    </bean>
+
+    <bean id="service" class="com.lau.lab1.Service.Service">
+        <constructor-arg ref="obsUserService"/>
+        <constructor-arg ref="obsParticipantService"/>
+        <constructor-arg ref="obsProbaService"/>
+        <constructor-arg ref="model"/>
+    </bean>
+</beans>
